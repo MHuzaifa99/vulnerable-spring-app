@@ -50,21 +50,22 @@ public class AuthController {
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         // String pass = encoder.encode(loginRequest.getPassword());
-        User user = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
-        return ResponseEntity.ok(user);
-        // Authentication authentication = authenticationManager.authenticate(
-        //         new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), pass));
-        // SecurityContextHolder.getContext().setAuthentication(authentication);
-        // String jwt = jwtUtils.generateJwtToken(authentication);
+        // User user = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
+        // System.out.println(user.getPassword());
+        // return ResponseEntity.ok(user);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
 
-        // UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
 
-        // return ResponseEntity.ok(new JwtResponse(jwt,
-        //         userDetails.getId(),
-        //         userDetails.getUsername(),
-        //         userDetails.getEmail()
-        //         ));
+        return ResponseEntity.ok(new JwtResponse(jwt,
+                userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getEmail()
+                ));
     }
 
     @PostMapping("/signup")
