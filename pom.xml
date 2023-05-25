@@ -14,7 +14,7 @@
 	<name>student-management-system</name>
 	<description>Student Management System using Spring Boot and Thymeleaf</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -79,6 +79,11 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 			<version>4.2.2.RELEASE</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>42.5.4</version>
 		</dependency>
 	</dependencies>
 

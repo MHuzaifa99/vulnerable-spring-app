@@ -49,20 +49,22 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        // String pass = encoder.encode(loginRequest.getPassword());
+        User user = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
+        return ResponseEntity.ok(user);
+        // Authentication authentication = authenticationManager.authenticate(
+        //         new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), pass));
+        // SecurityContextHolder.getContext().setAuthentication(authentication);
+        // String jwt = jwtUtils.generateJwtToken(authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        // UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail()
-                ));
+        // return ResponseEntity.ok(new JwtResponse(jwt,
+        //         userDetails.getId(),
+        //         userDetails.getUsername(),
+        //         userDetails.getEmail()
+        //         ));
     }
 
     @PostMapping("/signup")
