@@ -1,5 +1,6 @@
 package com.emeritus.org.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,13 +50,18 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        // String pass = encoder.encode(loginRequest.getPassword());
-        // User user = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
-        // System.out.println(user.getPassword());
+        String pass = encoder.encode(loginRequest.getPassword());
+        User user = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
+        System.out.println(user.getPassword());
         // return ResponseEntity.ok(user);
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), user.getPassword(), new ArrayList<>()));
+
+                System.out.println("---------------------------------------------");
+                // System.out.println(authentication);
+                System.out.println("---------------------------------------------");
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
